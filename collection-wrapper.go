@@ -15,11 +15,12 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 )
 
-func processFile(inputPath string) {
+func processFile(inputPath string, options optionsRecord) {
 	log.Printf("Processing file %s", inputPath)
 
 	packageName, types := loadFile(inputPath)
@@ -37,16 +38,23 @@ func processFile(inputPath string) {
 	}
 	defer output.Close()
 
-	if err := render(output, inputPath, packageName, types); err != nil {
+	if err := render(output, inputPath, packageName, types, options.errors); err != nil {
 		log.Fatalf("Could not generate go code: %s", err)
 	}
 }
 
+type optionsRecord struct{
+	errors bool
+}
+
 func main() {
 	log.SetFlags(0)
-	log.SetPrefix("collection-wrapper: ")
+	log.SetPrefix("go-mobile-collection: ")
 
-	for _, path := range os.Args[1:] {
-		processFile(path)
+	var errorFlag = flag.Bool("use-errors", false, "makes the wrapper functions use proper errors")
+	flag.Parse()
+
+	for _, path := range flag.Args() {
+		processFile(path, optionsRecord{*errorFlag})
 	}
 }
