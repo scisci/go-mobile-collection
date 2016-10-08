@@ -37,7 +37,7 @@ func processFile(inputPath string) {
 	}
 	defer output.Close()
 
-	if err := render(output, packageName, types); err != nil {
+	if err := render(output, inputPath, packageName, types); err != nil {
 		log.Fatalf("Could not generate go code: %s", err)
 	}
 }
