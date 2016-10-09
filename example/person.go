@@ -6,3 +6,7 @@ type Person struct {
   YearOfBirth int
   CanRideABike bool
 }
+
+func (*Person) Equal(rhs *Person) bool{
+	return true
+}

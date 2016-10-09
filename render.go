@@ -71,6 +71,7 @@ func (v *{{.Name}}Collection) Equal(rhs *{{.Name}}Collection) bool {
     fmt.Printf("{{.Name}}Collection : error marshalling JSON")
     return nil
   }
+  return res
 {{end}}}
 
 {{if $errorsOn}}func (v *{{.Name}}Collection) UnmarshalJSON(data []byte) error {
@@ -130,9 +131,10 @@ func (v *{{.Name}}Collection) Count() int {
 
 {{if $errorsOn}}func (v *{{.Name}}Collection) At(i int) (*{{.Name}}, error){{else}}func (v *{{.Name}}Collection) At(i int) *{{.Name}}{{end}} {
   if i < 0 || i >= len(v.s) {
-{{if $errorsOn}}    return nil, errors.New(fmt.Sprintf("{{.Name}}Collection : invalid index %d\n", i)){{else}}    fmt.Printf("{{.Name}}Collection : invalid index %d\n", i){{end}}
+    {{if $errorsOn}}return nil, errors.New(fmt.Sprintf("{{.Name}}Collection : invalid index %d\n", i)){{else}}fmt.Printf("{{.Name}}Collection : invalid index %d\n", i)
+    return{{end}}
   }
-{{if $errorsOn}}  return v.s[i], nil{{else}}  return v.s[i]{{end}}
+  {{if $errorsOn}}return v.s[i], nil{{else}}return v.s[i]{{end}}
 }
 {{end}}`))
 )

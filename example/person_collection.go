@@ -43,6 +43,7 @@ func (v *PersonCollection) MarshalJSON() (res []byte) {
     fmt.Printf("PersonCollection : error marshalling JSON")
     return nil
   }
+  return res
 }
 
 func (v *PersonCollection) UnmarshalJSON(data []byte) {
@@ -99,6 +100,7 @@ func (v *PersonCollection) Count() int {
 func (v *PersonCollection) At(i int) *Person {
   if i < 0 || i >= len(v.s) {
     fmt.Printf("PersonCollection : invalid index %d\n", i)
+    return
   }
   return v.s[i]
 }
